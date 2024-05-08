@@ -1,7 +1,7 @@
-export  function serialize(input: Array<number>):Array<number> {
-    return input
+export  function serialize(input: Array<number>):string {
+    return JSON.stringify(input)
 }
 
-export  function deserialize(input: Array<number>): Array<number> {
-    return input
+export  function deserialize(input: string): Array<number> {
+    return JSON.parse(input)
 }

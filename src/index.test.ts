@@ -9,20 +9,25 @@ function getRandomInt(min: number, max: number) {
 }
 
 describe('serialize/deserialize module', () => {
+
     test('can serialize, desiarile', () => {
         const input = Array(10).fill('').map(()=> getRandomInt(1, 300))
         expect(deserialize(serialize(input))).toEqual(input);
     });
 
-    test('can zip 50 random numbers', () => {
+    test('can compress 50 random numbers', () => {
         const input = Array(50).fill('').map(()=> getRandomInt(1, 300))
+        // console.log('input', input)
 
         const defaultOutput = JSON.stringify(input);
         const defaultOutputLength = defaultOutput.length;
-        //
+        // console.log('defaultOutput', defaultOutput)
+        // console.log('defaultOutputLength', defaultOutputLength)
+
         const compressOutput = serialize(input);
         const compressOutputLength = compressOutput.length;
-
+        // console.log('compressOutput', compressOutput)
+        // console.log('compressOutputLength', compressOutputLength)
 
         expect(deserialize(compressOutput)).toEqual(input);
         expect(defaultOutputLength).toBeGreaterThan(compressOutputLength)

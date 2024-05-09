@@ -7,27 +7,27 @@ const radix: number = 36;
 
 export function compressByRadix(arg0: Array<number>): string {
     const numbers:Array<Array<number>> =  generateArray()
+    //
     arg0.forEach(v=>{
         const y= parseInt((v / radix) as unknown as string);
          numbers[y].push(v)
     })
 
-
-    const strings:Array<Array<string>> = generateArray()
-    numbers.forEach((v, row)=>{
-        v.forEach((v, column)=>strings[row][column] = Number(v - (radix*row)).toString(36))
-    })
-
-    let compressedString: Array<string> = []
-
-    strings.forEach((v)=>{
-        compressedString.push(v.join(''))
+    const  compressedString: Array<string> = [];
+    //
+    numbers.forEach((v, row)=> {
+        const rowCompressedString: Array<string> = []
+        //
+        v.forEach((v)=>{
+            rowCompressedString.push(Number(v - (radix*row)).toString(36))
+        })
+        compressedString.push(rowCompressedString.join(''));
     })
 
     return compressedString.join(',')
 }
 
-export function decompress(arg0: string):  Array<number>{
+export function decompressByRadix(arg0: string):  Array<number>{
     const split:Array<string> = arg0.split(',');
 
     const numbers:Array<number> = []

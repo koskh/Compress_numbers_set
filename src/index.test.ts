@@ -1,7 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
 
 import {serialize, deserialize} from './index'
-import {compressByRadix, decompress} from "./utils";
+import {compressByRadix, decompressByRadix} from "./utils";
 
 function getRandomInt(min: number, max: number) {
     const minCeiled = Math.ceil(min);
@@ -18,7 +18,7 @@ describe('serialize/deserialize module', () => {
         const compressData = compressByRadix(input);
         // console.log('compressOutput', compressData)
 
-        const decompressData = decompress(compressData);
+        const decompressData = decompressByRadix(compressData);
         // console.log('decompressData', decompressData)
 
         expect(decompressData.sort()).toEqual(input.sort());
@@ -29,20 +29,14 @@ describe('serialize/deserialize module', () => {
         expect(deserialize(serialize(input)).sort()).toEqual(input.sort());
     });
 
-    test('can compress 50 random numbers', () => {
+    test('can compress 50 random numbers ', () => {
         const input = Array(50).fill('').map(()=> getRandomInt(1, 300))
-        console.log('input', input)
-
+        //
         const defaultOutput = JSON.stringify(input);
         const defaultOutputLength = defaultOutput.length;
-
-        // console.log('defaultOutput', defaultOutput)
-        console.log('defaultOutputLength', defaultOutputLength)
-
+        //
         const compressOutput = serialize(input);
         const compressOutputLength = compressOutput.length;
-        // console.log('compressOutput', compressOutput)
-        console.log('compressOutputLength', compressOutputLength)
 
         expect(deserialize(compressOutput).sort()).toEqual(input.sort());
         //

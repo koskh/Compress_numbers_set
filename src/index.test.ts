@@ -24,24 +24,111 @@ describe('serialize/deserialize module', () => {
         expect(decompressData.sort()).toEqual(input.sort());
     });
 
-    test('can serialize, desiarile', () => {
+    test('can serialize, desiarilize', () => {
         const input = Array(10).fill('').map(()=> getRandomInt(1, 300))
         expect(deserialize(serialize(input)).sort()).toEqual(input.sort());
     });
 
-    test('can compress 50 random numbers ', () => {
+    test('can compress > 65% for 50 random numbers', () => {
         const input = Array(50).fill('').map(()=> getRandomInt(1, 300))
         //
         const defaultOutput = JSON.stringify(input);
         const defaultOutputLength = defaultOutput.length;
+        console.log('defaultOutputLength', defaultOutputLength)
         //
         const compressOutput = serialize(input);
         const compressOutputLength = compressOutput.length;
+        console.log('compressOutputLength', compressOutputLength)
 
         expect(deserialize(compressOutput).sort()).toEqual(input.sort());
         //
         expect(defaultOutputLength ).toBeGreaterThan(compressOutputLength )
-        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.5)
+        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.35)
+    });
+
+    test('can compress > 70% for 500 random numbers', () => {
+        const input = Array(500).fill('').map(()=> getRandomInt(1, 300))
+        //
+        const defaultOutput = JSON.stringify(input);
+        const defaultOutputLength = defaultOutput.length;
+        console.log('defaultOutputLength', defaultOutputLength)
+        //
+        const compressOutput = serialize(input);
+        const compressOutputLength = compressOutput.length;
+        console.log('compressOutputLength', compressOutputLength)
+
+        expect(deserialize(compressOutput).sort()).toEqual(input.sort());
+        //
+        expect(defaultOutputLength ).toBeGreaterThan(compressOutputLength )
+        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.3)
+    });
+
+    test('can compress > 70% for 1000 random numbers', () => {
+        const input = Array(1000).fill('').map(()=> getRandomInt(1, 300))
+        //
+        const defaultOutput = JSON.stringify(input);
+        const defaultOutputLength = defaultOutput.length;
+        console.log('defaultOutputLength', defaultOutputLength)
+        //
+        const compressOutput = serialize(input);
+        const compressOutputLength = compressOutput.length;
+        console.log('compressOutputLength', compressOutputLength)
+
+        expect(deserialize(compressOutput).sort()).toEqual(input.sort());
+        //
+        expect(defaultOutputLength ).toBeGreaterThan(compressOutputLength )
+        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.3)
+    });
+
+    test('can compress > 45 % all 100 numbers 1 sign', () => {
+        const input = Array(100).fill('').map(()=> getRandomInt(1, 9))
+        //
+        const defaultOutput = JSON.stringify(input);
+        const defaultOutputLength = defaultOutput.length;
+        console.log('defaultOutputLength', defaultOutputLength)
+        //
+        const compressOutput = serialize(input);
+        const compressOutputLength = compressOutput.length;
+        console.log('compressOutputLength', compressOutputLength)
+
+        expect(deserialize(compressOutput).sort()).toEqual(input.sort());
+        //
+        expect(defaultOutputLength ).toBeGreaterThan(compressOutputLength )
+        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.55)
+    });
+
+    test('can compress > 55 % all 100 numbers 2 sign', () => {
+        const input = Array(100).fill('').map(()=> getRandomInt(10, 99))
+        //
+        const defaultOutput = JSON.stringify(input);
+        const defaultOutputLength = defaultOutput.length;
+        console.log('defaultOutputLength', defaultOutputLength)
+        //
+        const compressOutput = serialize(input);
+        const compressOutputLength = compressOutput.length;
+        console.log('compressOutputLength', compressOutputLength)
+
+        expect(deserialize(compressOutput).sort()).toEqual(input.sort());
+        //
+        expect(defaultOutputLength ).toBeGreaterThan(compressOutputLength )
+        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.45)
+    });
+
+    test('can compress > 70% all 100 numbers 3 sign', () => {
+        const input = Array(100).fill('').map(()=> getRandomInt(100, 300))
+        //
+        const defaultOutput = JSON.stringify(input);
+        const defaultOutputLength = defaultOutput.length;
+        console.log('defaultOutputLength', defaultOutputLength)
+        //
+        const compressOutput = serialize(input);
+        const compressOutputLength = compressOutput.length;
+        console.log('compressOutputLength', compressOutputLength)
+
+        expect(deserialize(compressOutput).sort()).toEqual(input.sort());
+        //
+        expect(defaultOutputLength ).toBeGreaterThan(compressOutputLength )
+        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.3)
     });
 
 });

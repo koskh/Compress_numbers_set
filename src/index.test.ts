@@ -1,7 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
 
-import {serializeLossless, deserializeLossless} from './index'
-import {compress, decompress} from "./utils";
+import {serialize, deserialize} from './index'
+import {compressByRadix, decompress} from "./utils";
 
 function getRandomInt(min: number, max: number) {
     const minCeiled = Math.ceil(min);
@@ -9,39 +9,45 @@ function getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
 }
 
-describe('lossless serialize/deserialize module', () => {
+describe('serialize/deserialize module', () => {
 
     test('can compress/ decompress', () => {
         const input = Array(10).fill('').map(()=> getRandomInt(1, 300))
-        const compressData = compress(input);
-        const decompressData = decompress(compressData);
+        // console.log('input', input)
 
-        expect(decompressData).toEqual(input);
+        const compressData = compressByRadix(input);
+        // console.log('compressOutput', compressData)
+
+        const decompressData = decompress(compressData);
+        // console.log('decompressData', decompressData)
+
+        expect(decompressData.sort()).toEqual(input.sort());
     });
 
     test('can serialize, desiarile', () => {
         const input = Array(10).fill('').map(()=> getRandomInt(1, 300))
-        expect(deserializeLossless(serializeLossless(input))).toEqual(input);
+        expect(deserialize(serialize(input)).sort()).toEqual(input.sort());
     });
 
     test('can compress 50 random numbers', () => {
-        const input = Array(10).fill('').map(()=> getRandomInt(1, 300))
+        const input = Array(50).fill('').map(()=> getRandomInt(1, 300))
         console.log('input', input)
 
         const defaultOutput = JSON.stringify(input);
         const defaultOutputLength = defaultOutput.length;
-        console.log('defaultOutput', defaultOutput)
+
+        // console.log('defaultOutput', defaultOutput)
         console.log('defaultOutputLength', defaultOutputLength)
 
-        const compressOutput = serializeLossless(input);
+        const compressOutput = serialize(input);
         const compressOutputLength = compressOutput.length;
-        console.log('compressOutput', compressOutput)
+        // console.log('compressOutput', compressOutput)
         console.log('compressOutputLength', compressOutputLength)
 
-        expect(deserializeLossless(compressOutput)).toEqual(input);
-        expect(defaultOutputLength ).toBeGreaterThan(compressOutputLength )
+        expect(deserialize(compressOutput).sort()).toEqual(input.sort());
         //
-        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.6)
+        expect(defaultOutputLength ).toBeGreaterThan(compressOutputLength )
+        expect(compressOutputLength).toBeLessThan(defaultOutputLength * 0.5)
     });
 
 });

@@ -1,44 +1,43 @@
+const radix: number = 36;
 
-export function toSymbol(arg0: number): string {
-    return String.fromCharCode(arg0)
+ function generateArray<T>(): Array<Array<T>> {
+     // MIN = 0, MAX = 300 => maximum 9 "rows" for  1-300 numbers
+    return [[],[],[],[],[],[],[],[],[]]
 }
-export function fromSymbol(arg0: string): number {
-    return arg0.charCodeAt(0)
-}
+
+export function compressByRadix(arg0: Array<number>): string {
+    const numbers:Array<Array<number>> =  generateArray()
+    arg0.forEach(v=>{
+        const y= parseInt((v / radix) as unknown as string);
+         numbers[y].push(v)
+    })
 
 
-export function compress(arg0: Array<number>): string {
-    // return arg0.map(v=> v>=32 && v <=126? toSymbol(v): v).join(',')
-    // return arg0.map(v=> Number(v).toString(36).padStart(2, '0')).join('')
-    const numbers = arg0.map(v=> Number(v).toString(36).padStart(2, '0'))
-    // console.log('arg0', arg0.join());
-    // console.log('numbers', numbers.join(''));
-    // console.log('numbers111', compressGzip(numbers.join()));
-    // @ts-ignore
+    const strings:Array<Array<string>> = generateArray()
+    numbers.forEach((v, row)=>{
+        v.forEach((v, column)=>strings[row][column] = Number(v - (radix*row)).toString(36))
+    })
 
-    return numbers.join('')
+    let compressedString: Array<string> = []
+
+    strings.forEach((v)=>{
+        compressedString.push(v.join(''))
+    })
+
+    return compressedString.join(',')
 }
 
 export function decompress(arg0: string):  Array<number>{
-    const splitted:Array<string> = [];
+    const split:Array<string> = arg0.split(',');
 
-    for(let i = 0; i<arg0.length;  i = i + 2) {
-        splitted.push(`${arg0.at(i)}${arg0.at(i+1)}`)
-    }
-    // const splitted = arg0.split(',')
-    // return <Array<number>> arg0.map(v=> v>= ' ' && v <='~'? fromSymbol(<string> v): v)
-    return splitted.map(v => parseInt(v, 36))
+    const numbers:Array<number> = []
+    //
+    split.forEach((codedString, rowIndex)=>{
+        for(let c =0; c<codedString.length; c++) {
+            numbers.push( (radix*rowIndex) + parseInt(codedString.at(c) || '0', radix))
+        }
+    })
+
+    return numbers
 }
 
-
-// export const compressGzip = async (
-//     str: string,
-//     encoding = 'gzip' as CompressionFormat
-// ): Promise<ArrayBuffer> => {
-//     const byteArray = new TextEncoder().encode(str)
-//     const cs = new CompressionStream(encoding)
-//     const writer = cs.writable.getWriter()
-//     writer.write(byteArray)
-//     writer.close()
-//     return await new Response(cs.readable).arrayBuffer()
-// }

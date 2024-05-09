@@ -1,23 +1,13 @@
-import {compress, decompress} from "./utils";
+import {compressByRadix, decompress} from "./utils";
 
 
-export  function serializeLossless(input: Array<number>):string {
-    return JSON.stringify(compress(input))
-
-}
-
-export  function deserializeLossless(input: string): Array<number> {
-    return decompress(JSON.parse(input))
+export  function serialize(input: Array<number>):string {
+    // return JSON.stringify(compress(input))
+    return JSON.stringify(compressByRadix(input))
 
 }
 
-
-export  function serializeLose(input: Array<number>):string {
-    return JSON.stringify(compress(input))
-
-}
-
-export  function deserializeLose(input: string): Array<number> {
+export  function deserialize(input: string): Array<number> {
     return decompress(JSON.parse(input))
 
 }
